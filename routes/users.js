@@ -7,6 +7,7 @@ const sql = require('../dbBase/sql.js')
 /* 登录接口 */
 router.post('/login', function(req, res, next) {
   let query = req.body
+  console.log(query)
   conn.query(sql.loginSql, query.username, (err, results) => {
     if (err) {
       return res.json({
