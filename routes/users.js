@@ -8,13 +8,13 @@ const sql = require('../dbBase/sql.js')
 router.post('/login', function(req, res, next) {
   let query = req.body
   conn.query(sql.loginSql, query.username, (err, results) => {
-    if (err || !results) {
+    if (err) {
       return res.json({
         resultCode: 500,
         errorDescription: '获取数据失败'
       })
     }
-    if (results.length !== 1) {
+    if (!results || results.length !== 1) {
       return res.json({
         resultCode: 500,
         errorDescription: '用户名不存在'
