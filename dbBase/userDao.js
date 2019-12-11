@@ -2,8 +2,8 @@ const conn = require('../utils/dbUtils.js')
 const sql = require('./sql.js')
 const userDao= {
   getUserInfo (id) {
-    new Promise((resolve, reject) => {
-      conn.query(sql.serachUserIngoSql, id, (err, results) => {
+    return new Promise((resolve, reject) => {
+      conn.query(sql.serachUserInfoSql, id, (err, results) => {
         if (err || !results) {
           reject('error')
         } else if (results.length !== 1) {
@@ -15,11 +15,15 @@ const userDao= {
     })
   },
   tokenExpired (id, cb) {
-    getUserInfo(id).then((res) => {
-      cb(false, res)
+    this.getUserInfo(id).then((res) => {
+      if (res.tokenExpired > new Date().getTime()) {
+        cb && cb(false,false, res)
+      } else {
+        cb && cb(false,true, res)
+      }
     })
     .catch((err) => {
-      cb(true, {})
+      cb && cb(true, false, {})
     })
   }
 }

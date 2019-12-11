@@ -3,6 +3,7 @@ var router = express.Router();
 const conn = require('../utils/dbUtils.js')
 const getTokenValue = require('../utils/index.js').getTokenValue
 const sql = require('../dbBase/sql.js')
+const userDao = require('../dbBase/userDao')
 
 /* 登录接口 */
 router.post('/login', function(req, res, next) {
@@ -50,5 +51,27 @@ router.post('/login', function(req, res, next) {
  * 获取用户信息
  * 模拟客户端token和guid,设置token过期时间为12小时，过期返回401
  */
+
+router.post('/getUserInfo', function(req, res, next) {
+  const query = req.body
+  userDao.tokenExpired(query.userId, (err, expired, data) => {
+    if (err) {
+      return res.json({
+        resultCode: 5000,
+        errorDescription: '获取用户信息失败'
+      })
+    }
+    if (expired) {
+      return res.json({
+        resultCode: 401,
+        errorDescription: '登录已过期'
+      })
+    }
+    return res.json({
+      data: data,
+      resultCode: 200
+    })
+  })
+});
 
 module.exports = router;
