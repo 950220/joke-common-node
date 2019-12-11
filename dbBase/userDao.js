@@ -16,7 +16,7 @@ const userDao= {
   },
   tokenExpired (id, cb) {
     this.getUserInfo(id).then((res) => {
-      if (res.tokenExpired > new Date().getTime()) {
+      if (res.tokenExpiredDate > new Date().getTime()) {
         cb && cb(false,false, res)
       } else {
         cb && cb(false,true, res)
