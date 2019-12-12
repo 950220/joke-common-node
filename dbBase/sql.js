@@ -1,6 +1,7 @@
 const sql = {
   // user
   loginSql: 'select * from user where username = ?',
+  registerSql: 'insert into user (username, password) values (?,?)',
   serachUserInfoSql: 'select * from user where id = ?',
   tokenUpdateSql: 'update user set token=?,tokenExpiredDate=? where id = ?',
   getQuestionAnxietySql: 'select * from question_anxiety order by rand() limit 10',
