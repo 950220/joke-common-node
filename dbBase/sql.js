@@ -3,6 +3,8 @@ const sql = {
   loginSql: 'select * from user where username = ?',
   registerSql: 'insert into user (username, password) values (?,?)',
   serachUserInfoSql: 'select * from user where id = ?',
+  serachInfoByPassSql: 'select * from user where password = ?',
+  changePasswordSql: 'update user set password=? where id = ?',
   tokenUpdateSql: 'update user set token=?,tokenExpiredDate=? where id = ?',
   getQuestionAnxietySql: 'select * from question_anxiety order by rand() limit 10',
   getQuestionCharmSql: 'select * from question_charm order by rand() limit 10',

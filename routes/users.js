@@ -120,7 +120,7 @@ router.post('/register', function(req, res, next) {
   })
 
   
-})
+});
 
 router.get('/captcha', function(req, res, next) {
   var captcha = svgCaptcha.create({ 
@@ -144,6 +144,51 @@ router.get('/captcha', function(req, res, next) {
   res.setHeader('Content-Type', 'image/svg+xml');
   res.write(String(captcha.data));
   res.end();
+});
+
+router.post('/forgetPassword', function(req, res, next) {
+
+});
+
+router.post('/changePassword', function(req, res, next) {
+  let query = req.body
+  if (!query.oldPassword) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '旧密码不能为空'
+    })
+  }
+  if (!query.newPassword) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '新密码不能为空',
+    })
+  }
+  if (!query.confirmPassword) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '确认密码不能为空'
+    })
+  }
+  if (query.newPassword !== query.confirmPassword) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '新密码和确认密码不一致'
+    })
+  }
+  conn.query(sql.changePasswordSql, [query.newPassword, query.userId], (err, results) => {
+    console.log(err)
+    if (err) {
+      return res.json({
+        resultCode: 5000,
+        errorDescription: '密码修改失败'
+      })
+    }
+    return res.json({
+      resultCode: 200,
+      errorDescription: '密码修改成功'
+    })
+  })
 })
 
 module.exports = router;
