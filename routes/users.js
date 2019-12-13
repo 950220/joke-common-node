@@ -3,8 +3,6 @@ var router = express.Router();
 const conn = require('../utils/dbUtils.js')
 const getTokenValue = require('../utils/index.js').getTokenValue
 const sql = require('../dbBase/sql.js')
-var cookieParser = require('cookie-parser');
-app.use(cookieParser());
 const userDao = require('../dbBase/userDao')
 var svgCaptcha = require('svg-captcha');
 
