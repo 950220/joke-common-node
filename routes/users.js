@@ -82,7 +82,6 @@ router.post('/getUserInfo', function(req, res, next) {
 router.post('/register', function(req, res, next) {
   let query = req.body
   let cookie = req.cookies['captcha']
-  console.log(cookie)
   if (!query.username) {
     return res.json({
       resultCode: 5000,
@@ -93,6 +92,18 @@ router.post('/register', function(req, res, next) {
     return res.json({
       resultCode: 5000,
       errorDescription: '密码不能为空'
+    })
+  }
+  if (!query.captcha) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '验证码不能为空'
+    })
+  }
+  if (query.captcha !== cookie) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '验证码错误'
     })
   }
   conn.query(sql.loginSql, query.username, (err, results) => {
