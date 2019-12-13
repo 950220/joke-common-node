@@ -3,6 +3,8 @@ var router = express.Router();
 const conn = require('../utils/dbUtils.js')
 const getTokenValue = require('../utils/index.js').getTokenValue
 const sql = require('../dbBase/sql.js')
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
 const userDao = require('../dbBase/userDao')
 var svgCaptcha = require('svg-captcha');
 
@@ -75,8 +77,14 @@ router.post('/getUserInfo', function(req, res, next) {
   })
 });
 
+/*
+ * 注册
+ *
+ */
 router.post('/register', function(req, res, next) {
   let query = req.body
+  let cookie = req.cookies['captcha']
+  console.log(cookie)
   if (!query.username) {
     return res.json({
       resultCode: 5000,
@@ -118,10 +126,12 @@ router.post('/register', function(req, res, next) {
       })
     }
   })
-
-  
 });
 
+/*
+ * 注册验证码
+ *
+ */
 router.get('/captcha', function(req, res, next) {
   var captcha = svgCaptcha.create({ 
     // 翻转颜色 
@@ -146,10 +156,18 @@ router.get('/captcha', function(req, res, next) {
   res.end();
 });
 
+/*
+ * 忘记密码
+ *
+ */
 router.post('/forgetPassword', function(req, res, next) {
 
 });
 
+/*
+ * 修改密码
+ *
+ */
 router.post('/changePassword', function(req, res, next) {
   let query = req.body
   if (!query.oldPassword) {

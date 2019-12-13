@@ -44,7 +44,7 @@ router.post('/getQuestion', function(req, res, next) {
       resultCode: 200
     })
   })
-});
+})
 
 
 module.exports = router;
