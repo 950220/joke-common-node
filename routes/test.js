@@ -72,6 +72,7 @@ router.post('/submitTest', function(req, res, next) {
     }
   });
   conn.query(sql.insertResutlSql, [id, score, JSON.stringify(results), testType], (err, results) => {
+    console.log(err)
     if (err) {
       return res.json({
         resultCode: 5000,
@@ -107,7 +108,7 @@ router.post('/getResultById', function(req, res, next) {
     let tagList = []
     let resultList = []
     results.forEach((item) => {
-      score = item.score
+      score = Math.floor(item.score/10) * 10
       testType = item.testType
     })
     console.log(score, testType)
