@@ -2,7 +2,7 @@ const sql = {
   // user
   loginSql: 'select * from user where username = ?',
   registerSql: 'insert into user (username, password) values (?,?)',
-  serachUserInfoSql: 'select * from user where id = ? as a left join(select )',
+  serachUserInfoSql: 'select * from(select * from user as p where id = ?)as a left join (select userId,avatar,nickname,intro,sex, birthday,profession,qq,wx from account_info)as u on a.id = u.userId',
   serachInfoByPassSql: 'select * from user where password = ?',
   changePasswordSql: 'update user set password=? where id = ?',
   tokenUpdateSql: 'update user set token=?,tokenExpiredDate=? where id = ?',
