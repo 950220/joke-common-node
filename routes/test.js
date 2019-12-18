@@ -103,6 +103,7 @@ router.post('/getResultById', function(req, res, next) {
         errorDescription: '获取失败'
       })
     }
+    console.log(results)
     let score = 0
     let testType = ''
     let tagList = []
