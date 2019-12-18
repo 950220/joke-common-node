@@ -14,6 +14,7 @@ const sql = {
   insertResutlSql: 'insert into result (userId,score,resultStr,testType) values(?,?,?,?)',
   getResultScoreSql: 'select score, testType from result where id=?',
   getResultLabelSql: 'select * from labels where score=? and testType=? order by  rand() limit 2',
-  getResultIntroSql: 'select * from result_intro where score=? and testType=? order by  rand() limit 2'
+  getResultIntroSql: 'select * from result_intro where score=? and testType=? order by  rand() limit 2',
+  getResultSql: 'select * from result where userId=?',
 }
 module.exports = sql

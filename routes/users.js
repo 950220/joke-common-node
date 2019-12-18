@@ -218,4 +218,29 @@ router.post('/changePassword', function(req, res, next) {
   })
 })
 
+router.post('/getTestHistory', function(req, res, next) {
+  let query = req.body
+  conn.query(sql.getResultSql, query.userId, (err, results) => {
+    if (err) {
+      return res.json({
+        resultCode: 5000,
+        errorDescription: '获取失败'
+      })
+    }
+    if (!results) {
+      return res.json({
+        resultCode: 5000,
+        errorDescription: '数据不存在'
+      })
+    }
+    return res.json({
+      resultCode: 200,
+      data: results.map((item) => {
+        item.resultStr = JSON.parse(item.resultStr)
+        return item
+      })
+    })
+  })
+})
+
 module.exports = router;
