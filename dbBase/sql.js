@@ -16,5 +16,6 @@ const sql = {
   getResultLabelSql: 'select * from labels where score=? and testType=? order by  rand() limit 2',
   getResultIntroSql: 'select * from result_intro where score=? and testType=? order by  rand() limit 2',
   getResultSql: 'select * from result where userId=?',
+  updateAvatarSql: 'update account_info set avatar = ? where userId = ?'
 }
 module.exports = sql

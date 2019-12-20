@@ -5,6 +5,7 @@ const getTokenValue = require('../utils/index.js').getTokenValue
 const sql = require('../dbBase/sql.js')
 const userDao = require('../dbBase/userDao')
 var svgCaptcha = require('svg-captcha');
+const multer  = require('multer');
 
 /* 登录接口 */
 router.post('/login', function(req, res, next) {
@@ -240,6 +241,49 @@ router.post('/getTestHistory', function(req, res, next) {
         return item
       })
     })
+  })
+})
+
+router.post('/changeUserInfo', function(req, res, next) {
+
+})
+
+var upload = multer({ dest: 'uploads/avatar'})
+router.post('/upload', upload.single('Filedata'), function(req, res, next) {
+  let file = req.file;
+  let query = req.query
+  if (!file) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: '文件不存在'
+    })
+  }
+  if (!query.userId) {
+    return res.json({
+      resultCode: 5000,
+      errorDescription: 'userId不存在'
+    })
+  }
+  conn.query(sql.updateAvatarSql, [file.filename, query.userId], (err, results) => {
+    if (err) {
+      res.json({
+        resultCode: 5000,
+        errorDescription: '上传失败'
+      })
+    }
+    if (results) {
+      return res.json({
+        resultCode: 200,
+        data: {
+          name: file.filename
+        }
+      })
+    } else {
+      return res.json({
+        resultCode: 5000,
+        errorDescription: '上传失败'
+      })
+    }
   })
 })
 
