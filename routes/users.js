@@ -6,6 +6,8 @@ const sql = require('../dbBase/sql.js')
 const userDao = require('../dbBase/userDao')
 var svgCaptcha = require('svg-captcha');
 const multer  = require('multer');
+var path = require('path');
+var fs = require('fs');
 
 /* 登录接口 */
 router.post('/login', function(req, res, next) {
@@ -248,9 +250,12 @@ router.post('/changeUserInfo', function(req, res, next) {
 
 })
 
-var upload = multer({ dest: 'uploads/avatar'})
+var upload = multer({
+  dest: 'uploads/avatar'
+})
 router.post('/upload', upload.single('Filedata'), function(req, res, next) {
   let file = req.file;
+  console.log(file)
   let query = req.query
   if (!file) {
     return res.json({
@@ -264,7 +269,16 @@ router.post('/upload', upload.single('Filedata'), function(req, res, next) {
       errorDescription: 'userId不存在'
     })
   }
-  conn.query(sql.updateAvatarSql, [file.filename, query.userId], (err, results) => {
+  var oldfliepath = path.join('./',"uploads/avatar",file.filename)
+  var newfileName = file.filename + '.' + file.originalname.split('.')[file.originalname.split('.').length -1]
+  var newfilepath = path.join('./',"uploads/avatar", newfileName)
+  fs.rename(oldfliepath,newfilepath,function(err){
+    if (err) throw err;
+    fs.stat(newfilepath, function (err, stats) {
+        if (err) throw err;
+      });
+  });
+  conn.query(sql.updateAvatarSql, [newfileName, query.userId], (err, results) => {
     if (err) {
       res.json({
         resultCode: 5000,
@@ -275,7 +289,7 @@ router.post('/upload', upload.single('Filedata'), function(req, res, next) {
       return res.json({
         resultCode: 200,
         data: {
-          name: file.filename
+          name: newfileName
         }
       })
     } else {
